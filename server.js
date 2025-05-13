@@ -48,21 +48,35 @@ app.post("/whatsapp", async (req, res) => {
   // 📬 Risposta dinamica
   let risposta = "";
 
-  if (
-    messaggio.includes("info") ||
-    messaggio.includes("ho bisogno di info") ||
-    messaggio.includes("dammi info")
-  ) {
-    risposta =
-      "ℹ️ *Ecco tutte le informazioni utili:*\n\n" +
-      "📍 *Negozio*: 091xxxxxxx\n" +
-      "✉️ *Email*: assistenza@powermediasrl.it\n" +
-      "🌐 *Sito*: https://www.powermediasrl.it";
-  } else {
-    risposta =
-      "👋 *Benvenuto sulla messaggistica automatica di PowermediaSRL!*\n\n" +
-      "Per ricevere informazioni scrivi:\n*ho bisogno di INFO*";
-  }
+  if (messaggio.includes("info")) {
+  risposta =
+    "ℹ️ *Ecco tutte le informazioni utili:*\n\n" +
+    "📍 *Negozio*: 091xxxxxxx\n" +
+    "✉️ *Email*: assistenza@powermediasrl.it\n" +
+    "🌐 *Sito*: https://www.powermediasrl.it";
+} else if (messaggio.includes("assistenza") || messaggio.includes("supporto")) {
+  risposta =
+    "🆘 *Assistenza tecnica PowermediaSRL:*\n" +
+    "Scrivici a: *assistenza@powermediasrl.it* 📧";
+} else if (messaggio.includes("telefono") || messaggio.includes("numero")) {
+  risposta = "📞 Il nostro numero è *091xxxxxxx*";
+} else if (messaggio.includes("sito") || messaggio.includes("web")) {
+  risposta = "🌐 Il nostro sito è: *https://www.powermediasrl.it*";
+} else if (
+  messaggio.includes("operatore") ||
+  messaggio.includes("parlare") ||
+  messaggio.includes("chiamare")
+) {
+  risposta = "📲 Ti faremo contattare da un operatore il prima possibile!";
+} else {
+  risposta =
+    "👋 *Benvenuto sulla messaggistica automatica di PowermediaSRL!*\n\n" +
+    "Scrivi ad esempio:\n" +
+    "- *info* per i nostri contatti\n" +
+    "- *assistenza* per supporto\n" +
+    "- *sito* per aprire il sito\n" +
+    "- *operatore* per essere contattato";
+}
 
   twiml.message(risposta);
   res.type("text/xml").send(twiml.toString());
