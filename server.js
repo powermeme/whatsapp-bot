@@ -48,6 +48,19 @@ app.post("/whatsapp", async (req, res) => {
   // 📬 Risposta dinamica
   let risposta = "";
 
+  if (messaggio === "1") {
+  risposta =
+    "ℹ️ *INFO PowermediaSRL:*\n" +
+    "📍 Negozio: 091xxxxxxx\n" +
+    "✉️ Email: assistenza@powermediasrl.it\n" +
+    "🌐 Sito: https://www.powermediasrl.it";
+} else if (messaggio === "2") {
+  risposta = "🛠️ *Assistenza tecnica*: scrivi a *assistenza@powermediasrl.it*";
+} else if (messaggio === "3") {
+  risposta = "📞 Un operatore ti contatterà presto!";
+} else if (messaggio === "4") {
+  risposta = "🌐 Visita il nostro sito: https://www.powermediasrl.it";
+}
   if (messaggio.includes("info")) {
   risposta =
     "ℹ️ *Ecco tutte le informazioni utili:*\n\n" +
