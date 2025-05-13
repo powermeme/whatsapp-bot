@@ -46,20 +46,23 @@ app.post("/whatsapp", async (req, res) => {
 
   let risposta = "";
 
-  // 🔢 Menù numerico
-  if (messaggio === "1") {
-    risposta =
-      "ℹ️ *INFO PowermediaSRL:*\n" +
-      "📍 Negozio: 091xxxxxxx\n" +
-      "✉️ Email: assistenza@powermediasrl.it\n" +
-      "🌐 Sito: https://www.powermediasrl.it";
-  } else if (messaggio === "2") {
-    risposta = "🛠️ *Assistenza tecnica*: scrivi a *assistenza@powermediasrl.it*";
-  } else if (messaggio === "3") {
-    risposta = "📞 Un operatore ti contatterà il prima possibile!";
-  } else if (messaggio === "4") {
-    risposta = "🌐 Visita il nostro sito: https://www.powermediasrl.it";
-  }
+ // Normalizza numero (toglie spazi, simboli, emoji)
+const msgPulito = messaggio.replace(/[^a-z0-9]/gi, "").trim();
+
+if (msgPulito === "1") {
+  risposta =
+    "ℹ️ *INFO PowermediaSRL:*\n" +
+    "📍 Negozio: 091xxxxxxx\n" +
+    "✉️ Email: assistenza@powermediasrl.it\n" +
+    "🌐 Sito: https://www.powermediasrl.it";
+} else if (msgPulito === "2") {
+  risposta = "🛠️ *Assistenza tecnica*: scrivi a *assistenza@powermediasrl.it*";
+} else if (msgPulito === "3") {
+  risposta = "📞 Un operatore ti contatterà il prima possibile!";
+} else if (msgPulito === "4") {
+  risposta = "🌐 Visita il nostro sito: https://www.powermediasrl.it";
+}
+
 
   // 🔍 Risposte dinamiche per parole chiave
   else if (messaggio.includes("info")) {
