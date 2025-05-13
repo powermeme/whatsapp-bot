@@ -11,7 +11,7 @@ const auth = new google.auth.GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-// 💾 Salvataggio messaggio
+// 💾 Salvataggio su Google Sheets
 async function salvaMessaggio(numero, messaggio) {
   const client = await auth.getClient();
   const spreadsheetId = "13upINlRpyvouZybt4Zh31Wpy_fgOwIgh72NJQZNtRZo"; // <-- ID FOGLIO
@@ -38,8 +38,8 @@ app.post("/whatsapp", async (req, res) => {
 
   const numero = req.body.From;
   const messaggio = req.body.Body?.toLowerCase().trim();
-  const msgPulito = messaggio.replace(/[^a-z0-9]/gi, "").trim();
-  
+  const msgPulito = messaggio.replace(/[^a-z0-9]/gi, "").trim(); // 💡 Pulizia per menu numerico
+
   console.log("📩 Nuovo messaggio da:", numero);
   console.log("📨 Messaggio:", messaggio);
 
@@ -47,23 +47,20 @@ app.post("/whatsapp", async (req, res) => {
 
   let risposta = "";
 
- // Normalizza numero (toglie spazi, simboli, emoji)
-const msgPulito = messaggio.replace(/[^a-z0-9]/gi, "").trim();
-
-if (msgPulito === "1") {
-  risposta =
-    "ℹ️ *INFO PowermediaSRL:*\n" +
-    "📍 Negozio: 091xxxxxxx\n" +
-    "✉️ Email: assistenza@powermediasrl.it\n" +
-    "🌐 Sito: https://www.powermediasrl.it";
-} else if (msgPulito === "2") {
-  risposta = "🛠️ *Assistenza tecnica*: scrivi a *assistenza@powermediasrl.it*";
-} else if (msgPulito === "3") {
-  risposta = "📞 Un operatore ti contatterà il prima possibile!";
-} else if (msgPulito === "4") {
-  risposta = "🌐 Visita il nostro sito: https://www.powermediasrl.it";
-}
-
+  // 🔢 Menu numerico (anche con emoji, simboli, ecc.)
+  if (msgPulito === "1") {
+    risposta =
+      "ℹ️ *INFO PowermediaSRL:*\n" +
+      "📍 Negozio: 091xxxxxxx\n" +
+      "✉️ Email: assistenza@powermediasrl.it\n" +
+      "🌐 Sito: https://www.powermediasrl.it";
+  } else if (msgPulito === "2") {
+    risposta = "🛠️ *Assistenza tecnica*: scrivi a *assistenza@powermediasrl.it*";
+  } else if (msgPulito === "3") {
+    risposta = "📞 Un operatore ti contatterà il prima possibile!";
+  } else if (msgPulito === "4") {
+    risposta = "🌐 Visita il nostro sito: https://www.powermediasrl.it";
+  }
 
   // 🔍 Risposte dinamiche per parole chiave
   else if (messaggio.includes("info")) {
@@ -101,7 +98,7 @@ if (msgPulito === "1") {
   res.type("text/xml").send(twiml.toString());
 });
 
-// 🚪 Porta (per Render)
+// 🚪 Porta per Render
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`✅ Bot attivo sulla porta ${port}`);
