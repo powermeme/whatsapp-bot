@@ -38,7 +38,8 @@ app.post("/whatsapp", async (req, res) => {
 
   const numero = req.body.From;
   const messaggio = req.body.Body?.toLowerCase().trim();
-
+  const msgPulito = messaggio.replace(/[^a-z0-9]/gi, "").trim();
+  
   console.log("📩 Nuovo messaggio da:", numero);
   console.log("📨 Messaggio:", messaggio);
 
