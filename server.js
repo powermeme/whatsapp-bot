@@ -38,18 +38,28 @@ app.post("/whatsapp", async (req, res) => {
   const twiml = new MessagingResponse();
 
   const numero = req.body.From;
-  const messaggio = req.body.Body;
+  const messaggio = req.body.Body?.toLowerCase().trim(); // 👈 normalizziamo il testo
 
   console.log("📩 Nuovo messaggio da:", numero);
   console.log("📨 Messaggio:", messaggio);
 
-  await salvaMessaggio(numero, messaggio); // 👈 questa salva sul foglio
+  // 🔐 Salva su Google Sheets
+  await salvaMessaggio(numero, messaggio);
 
-  twiml.message("Ciao Mio Re! 👑 Ho ricevuto il tuo messaggio!");
+  // 📬 Risposte dinamiche
+  let risposta = "";
+
+  if (messaggio === "1") {
+    risposta = "📄 Ecco le info che cercavi!";
+  } else if (messaggio === "2") {
+    risposta = "📆 Puoi prenotare qui 👉 https://tuolink.com";
+  } else if (["ciao", "buongiorno", "salve"].includes(messaggio)) {
+    risposta = "👋 Ciao Mio Re! Come posso aiutarti?";
+  } else {
+    risposta = "🤖 Scusa Mio Re, non ho capito. Rispondi con:\n1 per Info\n2 per Prenotazioni";
+  }
+
+  // Invia risposta
+  twiml.message(risposta);
   res.type("text/xml").send(twiml.toString());
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log("✅ Bot attivo sulla porta " + port);
 });
