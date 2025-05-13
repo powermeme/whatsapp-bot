@@ -11,11 +11,11 @@ const auth = new google.auth.GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-// 💾 Funzione che salva i messaggi nel foglio
+// 💾 Salva il messaggio nel foglio
 async function salvaMessaggio(numero, messaggio) {
   const client = await auth.getClient();
 
-  const spreadsheetId = "13upINlRpyvouZybt4Zh31Wpy_fgOwIgh72NJQZNtRZo"; // <-- METTI QUI L'ID DEL TUO FOGLIO
+  const spreadsheetId = "13upINlRpyvouZybt4Zh31Wpy_fgOwIgh72NJQZNtRZo"; // <-- ID FOGLIO
 
   const now = new Date().toLocaleString("it-IT");
 
@@ -30,12 +30,10 @@ async function salvaMessaggio(numero, messaggio) {
   });
 }
 
-// 🚀 App Express
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// 💬 Webhook WhatsApp
 app.post("/whatsapp", async (req, res) => {
   const twiml = new MessagingResponse();
 
@@ -47,23 +45,29 @@ app.post("/whatsapp", async (req, res) => {
 
   await salvaMessaggio(numero, messaggio);
 
+  // 📬 Risposta dinamica
   let risposta = "";
 
-  if (messaggio === "1") {
-    risposta = "📄 Ecco le info che cercavi!";
-  } else if (messaggio === "2") {
-    risposta = "📆 Puoi prenotare qui 👉 https://powermediasrl.it";
-  } else if (["ciao", "buongiorno", "salve", "prenotare"].includes(messaggio)) {
-    risposta = "👋 Ciao Mio Re! Come posso aiutarti?";
+  if (
+    messaggio.includes("info") ||
+    messaggio.includes("ho bisogno di info") ||
+    messaggio.includes("dammi info")
+  ) {
+    risposta =
+      "ℹ️ *Ecco tutte le informazioni utili:*\n\n" +
+      "📍 *Negozio*: 091xxxxxxx\n" +
+      "✉️ *Email*: assistenza@powermediasrl.it\n" +
+      "🌐 *Sito*: https://www.powermediasrl.it";
   } else {
-    risposta = "🤖 Scusa Mio Re, non ho capito. Rispondi con:\n1 per Info\n2 per Prenotazioni";
+    risposta =
+      "👋 *Benvenuto sulla messaggistica automatica di PowermediaSRL!*\n\n" +
+      "Per ricevere informazioni scrivi:\n*ho bisogno di INFO*";
   }
 
   twiml.message(risposta);
   res.type("text/xml").send(twiml.toString());
 });
 
-// 🟢 Porta per Render
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`✅ Bot attivo sulla porta ${port}`);
