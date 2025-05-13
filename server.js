@@ -82,6 +82,19 @@ app.post("/whatsapp", async (req, res) => {
   ) {
     risposta = "📲 Ti faremo contattare da un operatore il prima possibile!";
   }
+// 👇 RISPOSTA DI RINGRAZIAMENTO
+else if (
+  messaggio.includes("grazie") ||
+  messaggio.includes("buongiornata") ||
+  messaggio.includes("buona giornata") ||
+  messaggio.includes("buonaserata") ||
+  messaggio.includes("buona serata")
+) {
+  risposta =
+    "🙏 *Grazie a te per averci contattato!*\n" +
+    "Se hai bisogno siamo sempre disponibili 💬\n\n" +
+    "*PowermediaSRL*";
+}
 
   // 🧊 Risposta predefinita
   else {
