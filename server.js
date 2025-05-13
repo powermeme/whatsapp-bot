@@ -12,7 +12,7 @@ app.post("/whatsapp", (req, res) => {
   console.log("📩 Nuovo messaggio da:", req.body.From);
   console.log("📨 Messaggio:", req.body.Body);
 
-  twiml.message("Ciao Mio Re! 👑 Ho ricevuto il tuo messaggio!");
+  twiml.message("Funzioa teist'i minchia");
 
   res.type("text/xml").send(twiml.toString());
 });
